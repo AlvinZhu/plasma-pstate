@@ -109,7 +109,7 @@ fi
 
 json="{"
 if check_dell_thermal; then
-    json="${json},\"thermal_mode\":\"${thermal_mode}\""
+    json="${json}\"thermal_mode\":\"${thermal_mode}\""
 fi
 json="${json}}"
 echo $json
