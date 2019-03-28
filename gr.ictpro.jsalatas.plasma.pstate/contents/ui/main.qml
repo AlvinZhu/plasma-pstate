@@ -194,7 +194,7 @@ Item {
         engine: 'executable'
 
         property bool isReady: false
-        property string commandSource: 'sudo /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read-all'
+        property string commandSource: '/usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read-all'
 
         onNewData: {
             if (data['exit code'] > 0) {
@@ -219,6 +219,38 @@ Item {
 
         }
         interval: 2000
+    }
+
+    PlasmaCore.DataSource {
+        id: thermalModeDS
+        engine: 'executable'
+
+        property bool isReady: false
+        property string commandSource: 'sudo /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read_thermal_mode'
+
+        onNewData: {
+            if (data['exit code'] > 0) {
+                print('thermalModeDS error: ' + data.stderr)
+            } else {
+                var obj = JSON.parse(data.stdout);
+                var keys = Object.keys(obj);
+                for(var i=0; i< keys.length; i++) {
+                    sensors_model[keys[i]]['value'] = obj[keys[i]];
+                }
+                if(!isReady) {
+                    dataSourceReady();
+                    isReady = true;
+                }
+                sensorsValuesChanged();
+            }
+        }
+        Component.onCompleted: {
+            thermalModeDS.connectedSources = [];
+            thermalModeDS.connectedSources.length = 0;
+            thermalModeDS.connectedSources.push(thermalModeDS.commandSource);
+
+        }
+        interval: 3600000
     }
 
     PlasmaCore.DataSource {

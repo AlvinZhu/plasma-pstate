@@ -101,6 +101,20 @@ set_thermal_mode () {
     smbios-thermal-ctl --set-thermal-mode=$1 2> /dev/null
 }
 
+
+read_thermal_mode () {
+if check_dell_thermal; then
+    thermal_mode=`smbios-thermal-ctl -g | grep -C 1 "Current Thermal Modes:"  | tail -n 1 | awk '{$1=$1;print}' | sed "s/\t//g" | sed "s/ /-/g" | tr [A-Z] [a-z] `
+fi
+
+json="{"
+if check_dell_thermal; then
+    json="${json},\"thermal_mode\":\"${thermal_mode}\""
+fi
+json="${json}}"
+echo $json
+}
+
 read_all () {
 cpu_min_perf=`cat $CPU_MIN_PERF`
 cpu_max_perf=`cat $CPU_MAX_PERF`
@@ -128,10 +142,6 @@ if [ -z "$energy_perf" ]; then
             s/(0x000000000000000f|EPB 15)/power/' | \
     awk '{ printf "%s\n", $2; }' | head -n 1`
 fi
-if check_dell_thermal; then
-    thermal_mode=`smbios-thermal-ctl -g | grep -C 1 "Current Thermal Modes:"  | tail -n 1 | awk '{$1=$1;print}' | sed "s/\t//g" | sed "s/ /-/g" | tr [A-Z] [a-z] `
-fi
-
 json="{"
 json="${json}\"cpu_min_perf\":\"${cpu_min_perf}\""
 json="${json},\"cpu_max_perf\":\"${cpu_max_perf}\""
@@ -144,9 +154,6 @@ json="${json},\"gpu_boost_freq\":\"${gpu_boost_freq}\""
 json="${json},\"gpu_cur_freq\":\"${gpu_cur_freq}\""
 json="${json},\"cpu_governor\":\"${cpu_governor}\""
 json="${json},\"energy_perf\":\"${energy_perf}\""
-if check_dell_thermal; then
-    json="${json},\"thermal_mode\":\"${thermal_mode}\""
-fi
 json="${json}}"
 echo $json
 }
@@ -188,6 +195,10 @@ case $1 in
         set_thermal_mode $2
         ;;
 
+    "-read_thermal_mode")
+        read_thermal_mode
+        ;;
+
     "-read-all")
         read_all
         ;;
@@ -202,8 +213,8 @@ case $1 in
         echo "                  -gpu-boost-freq |"
         echo "                  -cpu-governor |"
         echo "                  -energy-perf |"
-        echo "                  -thermal-mode |"
-        echo "2: set_prefs.sh -read-all"
+        echo "                  -thermal-mode ] value"
+        echo "2: set_prefs.sh [ -read-all | -read_thermal_mode ]"
         exit 3
         ;;
 esac
