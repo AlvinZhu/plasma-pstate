@@ -35,6 +35,9 @@ function array_to_int(items) {
             res += val + items['unit'];
         }
     };
+    if(res == '0%'){
+        res = ''
+    }
     return res;
 }
 

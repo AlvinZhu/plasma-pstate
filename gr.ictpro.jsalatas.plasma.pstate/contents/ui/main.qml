@@ -77,18 +77,17 @@ Item {
         }
     }
 
-    function get_value_text(sensor, value) {
-        // lol! Is this the bwsat way to do it?
-        var obj = {'value': value, 'unit': sensors_model[sensor]['unit']}
-        return sensors_model[sensor]['print'](obj)
+    function get_sensor_text(sensor) {
+        var value = sensors_model[sensor]['print'](sensors_model[sensor]);
+        return value || 'N/A';
     }
 
     function get_sensors_text(sensors) {
         var res = '';
         if(sensors != undefined) {
             for(var i = 0 ; i < sensors.length; i++) {
-                var value = sensors_model[sensors[i]]['print'](sensors_model[sensors[i]]);
-                if(value) {
+                var value = get_sensor_text(sensors[i]);
+                if(value != 'N/A') {
                     if(res) {
                         res += ' | ';
                     }
@@ -96,7 +95,9 @@ Item {
                 }
             }
         }
-
+        if(res == '0%'){
+            res = ''
+        }
         return res || 'N/A';
     }
 
@@ -274,11 +275,22 @@ Item {
             toolTipSubText += '</tr>'
         }
 
-        txt = get_sensors_text(['package_temp', 'fan_speeds']);
+        txt = get_sensor_text('package_temp');
         if (txt != 'N/A') {
             toolTipSubText += '<tr>'
             toolTipSubText += '<td style="text-align: center;">'
             toolTipSubText += '<span style="font-family: Plasma pstate Manager;font-size: 32px;">b</span>'
+            toolTipSubText += '</td>'
+            toolTipSubText += '<td style="text-align: left;">'
+            toolTipSubText += '<span style="font-size: 22px;">&nbsp;&nbsp;'+ txt +'</span>'
+            toolTipSubText += '</td>'
+            toolTipSubText += '</tr>'
+        }
+        txt = get_sensor_text('fan_speeds');
+        if (txt != 'N/A') {
+            toolTipSubText += '<tr>'
+            toolTipSubText += '<td style="text-align: center;">'
+            toolTipSubText += '<span style="font-family: Plasma pstate Manager;font-size: 32px;">n</span>'
             toolTipSubText += '</td>'
             toolTipSubText += '<td style="text-align: left;">'
             toolTipSubText += '<span style="font-size: 22px;">&nbsp;&nbsp;'+ txt +'</span>'
