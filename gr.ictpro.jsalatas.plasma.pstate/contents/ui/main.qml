@@ -77,6 +77,12 @@ Item {
         }
     }
 
+    function get_value_text(sensor, value) {
+        // lol! Is this the bwsat way to do it?
+        var obj = {'value': value, 'unit': sensors_model[sensor]['unit']}
+        return sensors_model[sensor]['print'](obj)
+    }
+
     function get_sensor_text(sensor) {
         var value = sensors_model[sensor]['print'](sensors_model[sensor]);
         return value || 'N/A';
@@ -225,7 +231,6 @@ Item {
         id: thermalModeDS
         engine: 'executable'
 
-        property bool isReady: false
         property string commandSource: 'sudo /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read_thermal_mode'
 
         onNewData: {
@@ -237,10 +242,6 @@ Item {
                 for(var i=0; i< keys.length; i++) {
                     sensors_model[keys[i]]['value'] = obj[keys[i]];
                 }
-                if(!isReady) {
-                    dataSourceReady();
-                    isReady = true;
-                }
                 sensorsValuesChanged();
             }
         }
@@ -250,7 +251,7 @@ Item {
             thermalModeDS.connectedSources.push(thermalModeDS.commandSource);
 
         }
-        interval: 3600000
+        interval: 0
     }
 
     PlasmaCore.DataSource {
@@ -266,6 +267,16 @@ Item {
                 print("    error: " + data.stderr)
             } else {
                 print("    done")
+                var ret = data.stdout.trim();
+                if(ret.length != 0){
+                    var obj = JSON.parse(data.stdout);
+                    var keys = Object.keys(obj);
+                    for(var i=0; i< keys.length; i++) {
+                        sensors_model[keys[i]]['value'] = obj[keys[i]];
+                    }
+                    sensorsValuesChanged();
+                }
+
             }
         }
         Component.onCompleted: {

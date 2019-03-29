@@ -97,11 +97,6 @@ set_energy_perf () {
     fi
 }
 
-set_thermal_mode () {
-    smbios-thermal-ctl --set-thermal-mode=$1 2> /dev/null
-}
-
-
 read_thermal_mode () {
 if check_dell_thermal; then
     thermal_mode=`smbios-thermal-ctl -g | grep -C 1 "Current Thermal Modes:"  | tail -n 1 | awk '{$1=$1;print}' | sed "s/\t//g" | sed "s/ /-/g" | tr [A-Z] [a-z] `
@@ -113,6 +108,11 @@ if check_dell_thermal; then
 fi
 json="${json}}"
 echo $json
+}
+
+set_thermal_mode () {
+    smbios-thermal-ctl --set-thermal-mode=$1 > /dev/null 2>&1
+    read_thermal_mode
 }
 
 read_all () {
