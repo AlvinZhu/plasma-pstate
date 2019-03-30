@@ -200,7 +200,7 @@ Item {
         engine: 'executable'
 
         property bool isReady: false
-        property string commandSource: '/usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read-all'
+        property string commandSource: 'sudo /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read-all'
 
         onNewData: {
             if (data['exit code'] > 0) {
@@ -224,34 +224,30 @@ Item {
             monitorDS.connectedSources.push(monitorDS.commandSource);
 
         }
-        interval: 2000
+        interval: 0
     }
 
     PlasmaCore.DataSource {
-        id: thermalModeDS
+        id: gpuFreqDS
         engine: 'executable'
 
-        property string commandSource: 'sudo /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read_thermal_mode'
+        property string commandSource: '/usr/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz'
 
         onNewData: {
             if (data['exit code'] > 0) {
-                print('thermalModeDS error: ' + data.stderr)
+                print('gpuFreqDS error: ' + data.stderr)
             } else {
-                var obj = JSON.parse(data.stdout);
-                var keys = Object.keys(obj);
-                for(var i=0; i< keys.length; i++) {
-                    sensors_model[keys[i]]['value'] = obj[keys[i]];
-                }
+                sensors_model['gpu_cur_freq']['value'] = data.stdout.trim();
                 sensorsValuesChanged();
             }
         }
         Component.onCompleted: {
-            thermalModeDS.connectedSources = [];
-            thermalModeDS.connectedSources.length = 0;
-            thermalModeDS.connectedSources.push(thermalModeDS.commandSource);
+            gpuFreqDS.connectedSources = [];
+            gpuFreqDS.connectedSources.length = 0;
+            gpuFreqDS.connectedSources.push(gpuFreqDS.commandSource);
 
         }
-        interval: 0
+        interval: 2000
     }
 
     PlasmaCore.DataSource {
