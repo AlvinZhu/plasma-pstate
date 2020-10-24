@@ -291,14 +291,14 @@ Item {
         var toolTipSubText ='';
         var txt = '';
 
-        toolTipSubText += '<table>'
+        toolTipSubText += '<font size="4"><table>'
 
         toolTipSubText += '<tr>'
         toolTipSubText += '<td style="text-align: right;">'
-        toolTipSubText += '<span style="font-family: Plasma pstate Manager;font-size: 32px;">d</span>'
+        toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">d</font></span>'
         toolTipSubText += '</td>'
         toolTipSubText += '<td style="text-align: left;">'
-        toolTipSubText += '<span style="font-size: 22px;">&nbsp;&nbsp;'+get_sensors_text(['cpu_cur_load', 'cpu_cur_freq', 'gpu_cur_freq'])+'</span>'
+        toolTipSubText += '<span>&nbsp;&nbsp;'+get_sensors_text(['cpu_cur_load', 'cpu_cur_freq', 'gpu_cur_freq'])+'</span>'
         toolTipSubText += '</td>'
         toolTipSubText += '</tr>'
 
@@ -306,10 +306,10 @@ Item {
         if(txt != 'N/A') {
             toolTipSubText += '<tr>'
             toolTipSubText += '<td style="text-align: center;">'
-            toolTipSubText += '<span style="font-family: Plasma pstate Manager;font-size: 32px;">h</span>'
+            toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">h</font></span>'
             toolTipSubText += '</td>'
             toolTipSubText += '<td style="text-align: left;">'
-            toolTipSubText += '<span style="font-size: 22px;">&nbsp;&nbsp;'+ txt +'</span>'
+            toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
             toolTipSubText += '</td>'
             toolTipSubText += '</tr>'
         }
@@ -318,10 +318,10 @@ Item {
         if (txt != 'N/A') {
             toolTipSubText += '<tr>'
             toolTipSubText += '<td style="text-align: center;">'
-            toolTipSubText += '<span style="font-family: Plasma pstate Manager;font-size: 32px;">b</span>'
+            toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">b</font></span>'
             toolTipSubText += '</td>'
             toolTipSubText += '<td style="text-align: left;">'
-            toolTipSubText += '<span style="font-size: 22px;">&nbsp;&nbsp;'+ txt +'</span>'
+            toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
             toolTipSubText += '</td>'
             toolTipSubText += '</tr>'
         }
@@ -329,10 +329,10 @@ Item {
         if (txt != 'N/A') {
             toolTipSubText += '<tr>'
             toolTipSubText += '<td style="text-align: center;">'
-            toolTipSubText += '<span style="font-family: Plasma pstate Manager;font-size: 32px;">n</span>'
+            toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">b</font></span>'
             toolTipSubText += '</td>'
             toolTipSubText += '<td style="text-align: left;">'
-            toolTipSubText += '<span style="font-size: 22px;">&nbsp;&nbsp;'+ txt +'</span>'
+            toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
             toolTipSubText += '</td>'
             toolTipSubText += '</tr>'
         }
