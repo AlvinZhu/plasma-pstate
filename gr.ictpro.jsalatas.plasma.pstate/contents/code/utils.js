@@ -35,9 +35,6 @@ function array_to_int(items) {
             res += val + items['unit'];
         }
     };
-    if(res == '0%'){
-        res = ''
-    }
     return res;
 }
 
@@ -79,53 +76,83 @@ var sensors = {
     'cpu_governor': {'value': undefined, 'unit':'', 'print': to_string},
     'energy_perf': {'value': undefined, 'unit':'', 'print': to_string},
     'thermal_mode': {'value': undefined, 'unit':'', 'print': to_string}, 
+    'lg_battery_charge_limit': {'value': undefined, 'unit':'', 'print': to_bool},
+    'lg_usb_charge': {'value': undefined, 'unit':'', 'print': to_bool},
+    'lg_fan_mode': {'value': undefined, 'unit':'', 'print': to_bool},
+    'powermizer': {'value': undefined, 'unit':'', 'print': to_string}, 
+
 }
 
 var vendors = {
     'dell': {'provides': ['thermal_mode']},
+    'lg-laptop': {'provides': ['lg_battery_charge_limit', 'lg_usb_charge', 'lg_fan_mode']},
+    'nvidia': {'provides': ['powermizer']}
 }
 
 var model =  [
-    {'type': 'header', 'text': 'Processor Settings', 'icon': 'd',
+    {'type': 'header', 'text': i18n("Processor Settings"), 'icon': 'd',
         'sensors': ['cpu_cur_load', 'cpu_cur_freq', 'gpu_cur_freq'],
         'items': [
-            {'type': 'group', 'text': 'CPU Frequencies', 'items' :[
-                {'type': 'slider', 'text': 'Min perf', 'min': 0, 'max': 100, 'sensor': 'cpu_min_perf'},
-                {'type': 'slider', 'text': 'Max perf', 'min': 0, 'max': 100, 'sensor': 'cpu_max_perf'},
-                {'type': 'switch', 'text': 'Turbo', 'sensor': 'cpu_turbo'}
+            {'type': 'group', 'text': i18n("CPU Frequencies"), 'items' :[
+                {'type': 'slider', 'text': i18n("Min perf"), 'min': 0, 'max': 100, 'sensor': 'cpu_min_perf'},
+                {'type': 'slider', 'text': i18n("Max perf"), 'min': 0, 'max': 100, 'sensor': 'cpu_max_perf'},
+                {'type': 'switch', 'text': i18n("Turbo"), 'sensor': 'cpu_turbo'}
             ]},
-            {'type': 'group', 'text': 'GPU Frequencies', 'visible': 'showIntelGPU', 'items' :[
-                {'type': 'slider', 'text': 'Min freq', 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_min_freq'},
-                {'type': 'slider', 'text': 'Max freq', 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_max_freq'},
-                {'type': 'slider', 'text': 'Boost freq', 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_boost_freq'},
+            {'type': 'group', 'text': i18n("GPU Frequencies"), 'visible': 'showIntelGPU', 'items' :[
+                {'type': 'slider', 'text': i18n("Min freq"), 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_min_freq'},
+                {'type': 'slider', 'text': i18n("Max freq"), 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_max_freq'},
+                {'type': 'slider', 'text': i18n("Boost freq"), 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_boost_freq'},
             ]},
-            {'type': 'radio', 'text': 'CPU Governor', 'sensor': 'cpu_governor', 'items' :[
-                {'symbol': 'a', 'text': 'Performance', 'sensor_value': 'performance'},
-                {'symbol': 'f', 'text': 'Powersave', 'sensor_value': 'powersave'}
+            {'type': 'radio', 'text': i18n("CPU Governor"), 'sensor': 'cpu_governor', 'items' :[
+                {'symbol': 'a', 'text': i18n("Performance"), 'sensor_value': 'performance'},
+                {'symbol': 'f', 'text': i18n("Powersave"), 'sensor_value': 'powersave'}
             ]}
         ]
     },
-    {'type': 'header', 'text': 'Energy Performance', 'icon': 'h',
+    {'type': 'header', 'text': i18n("Energy Performance"), 'icon': 'h',
         'sensors': ['battery_percentage', 'battery_remaining_time'],
         'items': [
             {'type': 'radio', 'text': '', 'sensor': 'energy_perf', 'items' :[
-                {'symbol': 'i', 'text': 'Default', 'sensor_value': 'default'},
-                {'symbol': 'a', 'text': 'Performance', 'sensor_value': 'performance'},
-                {'symbol': 'k', 'text': 'Balance Performance', 'sensor_value': 'balance_performance'},
-                {'symbol': 'l', 'text': 'Balance Power', 'sensor_value': 'balance_power'},
-                {'symbol': 'f', 'text': 'Power', 'sensor_value': 'power'}
+                {'symbol': 'i', 'text': i18n("Default"), 'sensor_value': 'default'},
+                {'symbol': 'a', 'text': i18n("Performance"), 'sensor_value': 'performance'},
+                {'symbol': 'k', 'text': i18n("Balance Performance"), 'sensor_value': 'balance_performance'},
+                {'symbol': 'l', 'text': i18n("Balance Power"), 'sensor_value': 'balance_power'},
+                {'symbol': 'f', 'text': i18n("Power"), 'sensor_value': 'power'}
             ]}
         ]
     },
-    {'type': 'header', 'text': 'Thermal Management', 'icon': 'b',
+    {'type': 'header', 'text': i18n("Thermal Management"), 'icon': 'b',
         'vendors': ['dell'],
         'sensors': ['package_temp', 'fan_speeds'],
         'items': [
             {'type': 'radio', 'text': '', 'sensor': 'thermal_mode', 'items' :[
-                 {'symbol': 'e', 'text': 'Performance', 'sensor_value': 'performance'},
-                 {'symbol': 'j', 'text': 'Balanced', 'sensor_value': 'balanced'},
-                 {'symbol': 'g', 'text': 'Cool Bottom', 'sensor_value': 'cool-bottom'},
-                {'symbol': 'c', 'text': 'Quiet', 'sensor_value': 'quiet'}
+                 {'symbol': 'e', 'text': i18n("Performance"), 'sensor_value': 'performance'},
+                 {'symbol': 'j', 'text': i18n("Balanced"), 'sensor_value': 'balanced'},
+                 {'symbol': 'g', 'text': i18n("Cool Bottom"), 'sensor_value': 'cool-bottom'},
+                {'symbol': 'c', 'text': i18n("Quiet"), 'sensor_value': 'quiet'}
+            ]}
+        ]
+    }, 
+    {'type': 'header', 'text': i18n("Power Supply Management"), 'icon': 'm',
+        'vendors': ['lg-laptop'], 
+        'items': [
+            {'type': 'switch', 'text': i18n("Battery Limit"), 'sensor': 'lg_battery_charge_limit'},
+            {'type': 'switch', 'text': i18n("USB Charge"), 'sensor': 'lg_usb_charge'}
+        ]
+    },
+    {'type': 'header', 'text': i18n("Fan Control"), 'icon': 'n',
+        'vendors': ['lg-laptop'], 
+        'items': [
+            {'type': 'switch', 'text': i18n("Silent Mode"), 'sensor': 'lg_fan_mode'}
+        ]
+    },
+    {'type': 'header', 'text': i18n("Nvidia Settings"), 'icon': 'o',
+        'vendors': ['nvidia'],
+        'items': [
+            {'type': 'combobox', 'text': i18n("PowerMizer"), 'sensor': 'powermizer', 'items' :[
+                 {'text': i18n("Adaptive"), 'sensor_value': '0'},
+                 {'text': i18n("Prefer Max Performance"), 'sensor_value': '1'},
+                {'text': i18n("Auto"), 'sensor_value': '2'}
             ]}
         ]
     }

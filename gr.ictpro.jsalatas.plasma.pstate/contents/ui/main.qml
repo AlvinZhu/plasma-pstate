@@ -29,7 +29,7 @@ import '../code/utils.js' as Utils
 
 Item {
     id: main
-
+    
     signal sensorsValuesChanged
     signal dataSourceReady
     signal updateSensor(string name, string value)
@@ -43,6 +43,7 @@ Item {
     property var sensors_model: Utils.get_sensors()
     property alias isReady: monitorDS.isReady
     property bool inTray: (plasmoid.parent === null || plasmoid.parent.objectName === 'taskItemContainer')
+    property var readCommand: '/usr/bin/cat /var/tmp/pstate.dat'
 
     function sensor_short_name(long_name) {
         var parts = long_name.split('/');
@@ -83,17 +84,12 @@ Item {
         return sensors_model[sensor]['print'](obj)
     }
 
-    function get_sensor_text(sensor) {
-        var value = sensors_model[sensor]['print'](sensors_model[sensor]);
-        return value || 'N/A';
-    }
-
     function get_sensors_text(sensors) {
         var res = '';
         if(sensors != undefined) {
             for(var i = 0 ; i < sensors.length; i++) {
-                var value = get_sensor_text(sensors[i]);
-                if(value != 'N/A') {
+                var value = sensors_model[sensors[i]]['print'](sensors_model[sensors[i]]);
+                if(value) {
                     if(res) {
                         res += ' | ';
                     }
@@ -101,9 +97,7 @@ Item {
                 }
             }
         }
-        if(res == '0%'){
-            res = ''
-        }
+
         return res || 'N/A';
     }
 
@@ -200,7 +194,7 @@ Item {
         engine: 'executable'
 
         property bool isReady: false
-        property string commandSource: 'sudo /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -read-all'
+        property string commandSource: readCommand
 
         onNewData: {
             if (data['exit code'] > 0) {
@@ -224,29 +218,6 @@ Item {
             monitorDS.connectedSources.push(monitorDS.commandSource);
 
         }
-        interval: 0
-    }
-
-    PlasmaCore.DataSource {
-        id: gpuFreqDS
-        engine: 'executable'
-
-        property string commandSource: '/usr/bin/cat /sys/class/drm/card0/gt_cur_freq_mhz'
-
-        onNewData: {
-            if (data['exit code'] > 0) {
-                print('gpuFreqDS error: ' + data.stderr)
-            } else {
-                sensors_model['gpu_cur_freq']['value'] = data.stdout.trim();
-                sensorsValuesChanged();
-            }
-        }
-        Component.onCompleted: {
-            gpuFreqDS.connectedSources = [];
-            gpuFreqDS.connectedSources.length = 0;
-            gpuFreqDS.connectedSources.push(gpuFreqDS.commandSource);
-
-        }
         interval: 2000
     }
 
@@ -254,7 +225,7 @@ Item {
         id: updater
         engine: 'executable'
 
-        property string commandSource: 'sudo /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh -'
+        property string commandSource: '/usr/bin/pkexec /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh '
 
         onNewData: {
             updater.connectedSources = []
@@ -263,16 +234,6 @@ Item {
                 print("    error: " + data.stderr)
             } else {
                 print("    done")
-                var ret = data.stdout.trim();
-                if(ret.length != 0){
-                    var obj = JSON.parse(data.stdout);
-                    var keys = Object.keys(obj);
-                    for(var i=0; i< keys.length; i++) {
-                        sensors_model[keys[i]]['value'] = obj[keys[i]];
-                    }
-                    sensorsValuesChanged();
-                }
-
             }
         }
         Component.onCompleted: {
@@ -314,7 +275,7 @@ Item {
             toolTipSubText += '</tr>'
         }
 
-        txt = get_sensor_text('package_temp');
+        txt = get_sensors_text(['package_temp', 'fan_speeds']);
         if (txt != 'N/A') {
             toolTipSubText += '<tr>'
             toolTipSubText += '<td style="text-align: center;">'
@@ -325,18 +286,7 @@ Item {
             toolTipSubText += '</td>'
             toolTipSubText += '</tr>'
         }
-        txt = get_sensor_text('fan_speeds');
-        if (txt != 'N/A') {
-            toolTipSubText += '<tr>'
-            toolTipSubText += '<td style="text-align: center;">'
-            toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">b</font></span>'
-            toolTipSubText += '</td>'
-            toolTipSubText += '<td style="text-align: left;">'
-            toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
-            toolTipSubText += '</td>'
-            toolTipSubText += '</tr>'
-        }
-        toolTipSubText += '</table>'
+        toolTipSubText += '</table></font>'
 
         Plasmoid.toolTipSubText = toolTipSubText
     }

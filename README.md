@@ -24,6 +24,10 @@ through [libsmbios library](https://github.com/dell/libsmbios).
 
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/jsalatas/plasma-pstate/raw/master/screenshots/screenshot_3.png"><img src="https://github.com/jsalatas/plasma-pstate/raw/master/screenshots/screenshot_3.png" alt="Intel P-state and CPUFreq Manager Widget with LG Laptop Support features" title="Intel P-state and CPUFreq Manager Widget with LG Laptop Support features" width="500px"></a>
 
+3. [Nvidia PowerMizer Settings](https://www.nvidia.com/object/feature_powermizer.html). 
+
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/jsalatas/plasma-pstate/raw/master/screenshots/screenshot_4.png"><img src="https://github.com/jsalatas/plasma-pstate/raw/master/screenshots/screenshot_4.png" alt="Intel P-state and CPUFreq Manager Widget with Nvidia PowerMizer Settings" title="Intel P-state and CPUFreq Manager Widget with Nvidia PowerMizer Settings" width="500px"></a>
+
 
 ## What it isn't
 This is just a GUI widget and it is not meant to replace 
@@ -45,37 +49,33 @@ comfort of your graphical interface using point and click or tap interactions
 even in cases that a keyboard isn't available.
 
 ## How to install
-First of all you need to be in sudoers' group. After that you can just clone 
+
 the code and install it using the following commands:
 
 ```
 git clone https://github.com/jsalatas/plasma-pstate
 cd plasma-pstate
-sudo ./install.sh
+./install.sh
 ```
 **Notice:** If your processor doesn't support EPP(ie older generations without 
-HWP), then you need also to install the ``x86_energy_perf_policy`` which (in 
-case of Ubuntu 18.04 distros) is provided by the ``linux-tools`` package and 
+HWP), then you need also to install the ``x86_energy_perf_policy`` which is 
+provided by the ``kernel-tools`` (in case of Ubuntu 18.04 distros) ``linux-tools`` package and 
 can be installed using the following command
 
 ```
-sudo apt-install linux-tools-generic linux-tools-`uname -r`
+sudo apt install linux-tools-generic linux-tools-`uname -r`
 ```
 ## How to update
 Assuming that you have checked out the latest code, you just need to run the following commands as root:
 
 ```
-sudo kpackagetool5 -g -t Plasma/Applet -u gr.ictpro.jsalatas.plasma.pstate
+kpackagetool5 -g -t Plasma/Applet -u gr.ictpro.jsalatas.plasma.pstate
 
-sudo chmod 755 /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh 
+chmod 755 /usr/share/plasma/plasmoids/gr.ictpro.jsalatas.plasma.pstate/contents/code/set_prefs.sh 
 ```
-
 
 ## Contributions
 Please feel free to clone, hack, and contribute anything you may find useful, 
 especially in relation to similar to Dell's Thermal Management Feature that 
 may be available in other hardware platforms.
-
-
-
 

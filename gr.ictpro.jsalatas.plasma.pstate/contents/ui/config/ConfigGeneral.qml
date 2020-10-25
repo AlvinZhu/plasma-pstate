@@ -10,7 +10,7 @@ Item {
     GridLayout {
         Layout.fillWidth: true
         columns: 2
-        
+
         CheckBox {
             id: useDefaultIconCheckbox
             text: i18n('Use Default Icon')
@@ -30,11 +30,12 @@ Item {
             }
             enabled: !useDefaultIconCheckbox.checked
         }
-        
+
         CheckBox {
             id: showIntelGPUCheckbox
             text: i18n('Show Intel GPU')
             Layout.columnSpan: 2
         }
+
     }
 }
