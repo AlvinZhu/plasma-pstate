@@ -50,7 +50,9 @@ Item {
         return parts[parts.length - 1];
     }
 
-    Plasmoid.compactRepresentation: CompactRepresentation { }
+    Plasmoid.compactRepresentation: CompactRepresentation {
+        Layout.minimumWidth: theme.mSize(theme.defaultFont).width * 4
+    }
     Plasmoid.fullRepresentation: FullRepresentation { }
 
     Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation

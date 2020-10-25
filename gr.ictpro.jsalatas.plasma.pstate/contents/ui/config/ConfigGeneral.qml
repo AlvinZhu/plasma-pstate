@@ -13,12 +13,12 @@ Item {
 
         CheckBox {
             id: useDefaultIconCheckbox
-            text: i18n('Use Default Icon')
+            text: i18n('Show CPU Temperature')
             Layout.columnSpan: 2
         }
 
         Label {
-            text: i18n("Custom Icon:")
+            text: i18n("Show Custom Icon:")
             Layout.alignment: Qt.AlignRight
         }
 

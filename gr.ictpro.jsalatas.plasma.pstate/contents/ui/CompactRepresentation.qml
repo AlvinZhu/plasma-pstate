@@ -31,17 +31,18 @@ Item {
 
 
     PlasmaComponents.Label {
+        id: defaultIcon
+        
         anchors.fill: parent
         visible: plasmoid.configuration.useDefaultIcon
 
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
 
-        font.pixelSize: Math.min(parent.height, parent.width) * (inTray ? 1: 0.7)
-        font.pointSize: -1
-        font.family: symbolsFont.name
+//         font.pixelSize: Math.min(parent.height, parent.width) * (inTray ? 1: 0.7)
+//         font.pointSize: -1
 
-        text: 'd'
+        text: '0 \u2103'
     }
     
     MouseArea {
@@ -49,6 +50,13 @@ Item {
         anchors.fill: parent
         onClicked: {
             plasmoid.expanded = !plasmoid.expanded
+        }
+    }
+    
+    Connections {
+        target: main
+        onSensorsValuesChanged: {
+            defaultIcon.text = get_sensors_text(['package_temp']);
         }
     }
 }
