@@ -265,17 +265,17 @@ Item {
         toolTipSubText += '</td>'
         toolTipSubText += '</tr>'
 
-        txt = get_sensors_text(['battery_percentage', 'battery_remaining_time']);
-        if(txt != 'N/A') {
-            toolTipSubText += '<tr>'
-            toolTipSubText += '<td style="text-align: center;">'
-            toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">h</font></span>'
-            toolTipSubText += '</td>'
-            toolTipSubText += '<td style="text-align: left;">'
-            toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
-            toolTipSubText += '</td>'
-            toolTipSubText += '</tr>'
-        }
+//         txt = get_sensors_text(['battery_percentage', 'battery_remaining_time']);
+//         if(txt != 'N/A') {
+//             toolTipSubText += '<tr>'
+//             toolTipSubText += '<td style="text-align: center;">'
+//             toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">h</font></span>'
+//             toolTipSubText += '</td>'
+//             toolTipSubText += '<td style="text-align: left;">'
+//             toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
+//             toolTipSubText += '</td>'
+//             toolTipSubText += '</tr>'
+//         }
 
         txt = get_sensors_text(['package_temp', 'fan_speeds']);
         if (txt != 'N/A') {

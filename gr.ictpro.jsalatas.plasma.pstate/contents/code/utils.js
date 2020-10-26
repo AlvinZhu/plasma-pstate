@@ -109,8 +109,8 @@ var model =  [
             ]}
         ]
     },
-    {'type': 'header', 'text': i18n("Energy Performance"), 'icon': 'h',
-        'sensors': ['battery_percentage', 'battery_remaining_time'],
+    {'type': 'header', 'text': i18n("Energy Performance"), 'icon': 'b',
+        'sensors': ['package_temp', 'fan_speeds'],
         'items': [
             {'type': 'radio', 'text': '', 'sensor': 'energy_perf', 'items' :[
                 {'symbol': 'i', 'text': i18n("Default"), 'sensor_value': 'default'},
@@ -121,9 +121,9 @@ var model =  [
             ]}
         ]
     },
-    {'type': 'header', 'text': i18n("Thermal Management"), 'icon': 'b',
+    {'type': 'header', 'text': i18n("Thermal Management"), 'icon': 'h',
         'vendors': ['dell'],
-        'sensors': ['package_temp', 'fan_speeds'],
+        'sensors': ['battery_percentage', 'battery_remaining_time'],
         'items': [
             {'type': 'radio', 'text': '', 'sensor': 'thermal_mode', 'items' :[
                  {'symbol': 'e', 'text': i18n("Performance"), 'sensor_value': 'performance'},
