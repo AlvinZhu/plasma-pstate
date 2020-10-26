@@ -90,7 +90,7 @@ var vendors = {
 }
 
 var model =  [
-    {'type': 'header', 'text': i18n("Processor Settings"), 'icon': 'd',
+    {'type': 'header', 'text': i18n("Frequencies"), 'icon': 'd',
         'sensors': ['cpu_cur_load', 'cpu_cur_freq', 'gpu_cur_freq'],
         'items': [
             {'type': 'group', 'text': i18n("CPU Frequencies"), 'items' :[
@@ -102,17 +102,17 @@ var model =  [
                 {'type': 'slider', 'text': i18n("Min freq"), 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_min_freq'},
                 {'type': 'slider', 'text': i18n("Max freq"), 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_max_freq'},
                 {'type': 'slider', 'text': i18n("Boost freq"), 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_boost_freq'},
-            ]},
-            {'type': 'radio', 'text': i18n("CPU Governor"), 'sensor': 'cpu_governor', 'items' :[
-                {'symbol': 'a', 'text': i18n("Performance"), 'sensor_value': 'performance'},
-                {'symbol': 'f', 'text': i18n("Powersave"), 'sensor_value': 'powersave'}
             ]}
         ]
     },
     {'type': 'header', 'text': i18n("Energy Performance"), 'icon': 'b',
         'sensors': ['package_temp', 'fan_speeds'],
         'items': [
-            {'type': 'radio', 'text': '', 'sensor': 'energy_perf', 'items' :[
+            {'type': 'radio', 'text': i18n("Governor"), 'sensor': 'cpu_governor', 'items' :[
+                {'symbol': 'a', 'text': i18n("Performance"), 'sensor_value': 'performance'},
+                {'symbol': 'f', 'text': i18n("Powersave"), 'sensor_value': 'powersave'}
+            ]},
+            {'type': 'radio', 'text': i18n("Policy"), 'sensor': 'energy_perf', 'items' :[
                 {'symbol': 'i', 'text': i18n("Default"), 'sensor_value': 'default'},
                 {'symbol': 'a', 'text': i18n("Performance"), 'sensor_value': 'performance'},
                 {'symbol': 'k', 'text': i18n("Balance Performance"), 'sensor_value': 'balance_performance'},
