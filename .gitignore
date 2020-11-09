@@ -2,3 +2,5 @@
 *.qmlc
 
 *.jsc
+
+*.pkg.tar.zst
